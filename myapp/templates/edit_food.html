@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Food Item</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        },
+                        secondary: {
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        input: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'input-focus': '0 0 0 3px rgba(59, 130, 246, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md animate-fade-in">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Edit Food Item</h1>
+                <p class="mt-2 text-gray-600">Update the details below</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-gray-50">
+                    <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                        </svg>
+                        Editing: {{ food_item.name }}
+                    </h2>
+                    <div class="mt-1 text-sm text-gray-500">
+                        Current calories: <span class="font-medium">{{ food_item.calories }}</span>
+                    </div>
+                </div>
+
+                <form method="post" class="p-6 space-y-6">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-1">
+                        <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Food Name
+                        </label>
+                        <input type="text" id="{{ form.name.id_for_label }}" name="{{ form.name.name }}" 
+                               value="{{ form.name.value|default:'' }}"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-2 px-3 sm:text-sm transition duration-150 ease-in-out">
+                        {% if form.name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.name.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="space-y-1">
+                        <label for="{{ form.calories.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Calories
+                        </label>
+                        <div class="relative rounded-md shadow-sm">
+                            <input type="number" id="{{ form.calories.id_for_label }}" name="{{ form.calories.name }}" 
+                                   value="{{ form.calories.value|default:'' }}"
+                                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 py-2 px-3 pr-12 sm:text-sm transition duration-150 ease-in-out">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">kcal</span>
+                            </div>
+                        </div>
+                        {% if form.calories.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.calories.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4">
+                        <a href="{% url 'food_list' %}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-150">
+                            Cancel
+                        </a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-150">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            
+        </div>
+    </div>
+</body>
+</html>
